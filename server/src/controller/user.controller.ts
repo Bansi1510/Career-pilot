@@ -39,6 +39,7 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(201).json({
       success: true,
       message: "OTP sent successfully",
+      otp
     });
   } catch (error) {
     console.log(error)
