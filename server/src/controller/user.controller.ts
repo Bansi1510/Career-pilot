@@ -8,6 +8,17 @@ import { sendOtp } from "../utils/sendOtp";
 export const createUser = async (req: Request, res: Response) => {
   try {
     const { first_name, last_name, email, mobile_no, password } = req.body;
+    
+    const Record=await pool.query("SELECT * FROM users WHERE email=$1",[email])
+
+    if(Record.rows.length>0){
+      return res.status(409).json({success:false,message:"user with this email already registered"});
+    }
+
+    const DuplicateMobile=await pool.query('SELECT * FROM users WHERE mobile_no=$1',[mobile_no])
+    if(DuplicateMobile.rows.length>0){
+      return res.status(409).json({success:false,message:"user with this mobile number already registered"});
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -31,7 +42,9 @@ export const createUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.log(error)
-    res.status(500).json({success:false,message:"Internal server error"});
+    // res.status(500).json({success:false,message:"Internal server error",error:error});
+
+    res.status(500).json({error:error});
   }
 };
 
