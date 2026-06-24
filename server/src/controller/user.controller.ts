@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import type { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import pool from "../config/db";
 import { generateToken } from "../utils/generateToken";
@@ -29,7 +30,8 @@ export const createUser = async (req: Request, res: Response) => {
       message: "OTP sent successfully",
     });
   } catch (error) {
-    res.status(500).json(error);
+    console.log(error)
+    res.status(500).json({success:false,message:"Internal server error"});
   }
 };
 
@@ -71,12 +73,14 @@ export const verifyOtp = async (req: Request, res: Response) => {
       message: "Account verified",
     });
   } catch (error) {
-    res.status(500).json(error);
+    console.log(error)
+    res.status(500).json({success:false,message:"Internal server error"});
   }
 };
 
 export const resendOtp = async (req: Request, res: Response) => {
   const { email } = req.body;
+  try {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   const ReSend = await pool.query(
     `UPDATE users SET otp=$1,otp_expires_at=NOW()+INTERVAL '5 minutes' WHERE email=$2 RETURNING *`,
@@ -89,8 +93,13 @@ export const resendOtp = async (req: Request, res: Response) => {
 
   res.status(201).json({
     success: true,
-    message: "Re-OTP sent successfully",
+    message: "OTP Resent successfully",
   });
+  
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({success:false,message:"Internal server error"});
+  }
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -123,15 +132,20 @@ export const login = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      user,
+      message:`Welcome back ${user.first_name}`,
     });
   } catch (error) {
-    res.status(500).json(error);
+    console.log(error)
+    res.status(500).json({success:false,message:"Internal server error"});
   }
 };
 
-export const updateUser = async (req: Request, res: Response) => {
-  const id = req.user!.id;
+type AuthRequest = Request & { user?: JwtPayload | { id: string; email: string } };
+
+export const updateUser = async (req: AuthRequest, res: Response) => {
+  try {
+
+  const id = req.user?.id;
 
   const { first_name, last_name, mobile_no } = req.body;
 
@@ -147,7 +161,10 @@ export const updateUser = async (req: Request, res: Response) => {
     [first_name, last_name, mobile_no, id],
   );
 
-  res.json(result.rows[0]);
+  res.json({success:true,message:"updated successfully"});
+   } catch (error) {
+    res.json({success:false,message:"Internal server error"})
+  }
 };
 
 export const logout = (req: Request, res: Response) => {

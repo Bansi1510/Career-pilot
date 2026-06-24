@@ -4,9 +4,6 @@ import "./config/db";
 import cookieParser from "cookie-parser";
 import UserRouter from "./routes/user.route";
 
-
-
-
 const app = express();
 
 app.use(cookieParser());
