@@ -1,13 +1,14 @@
 import express from "express";
 import {
-createUser,
+  createUser,
   verifyOtp,
   login,
   updateUser,
   logout,
   resendOtp,
-} from "../controller/user.controller.ts";
-import auth from "../middleware/auth.ts";
+} from "../controller/user.controller";
+import auth from "../middleware/auth";
+
 
 const UserRouter = express.Router();
 
