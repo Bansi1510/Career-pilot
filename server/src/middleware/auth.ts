@@ -1,18 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
-import  jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
 
-interface AuthRequest extends Request {
-  user?: {
-    id: number;
-  };
-}
 
-const auth = (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): void => {
+
+const auth = (req: Request, res: Response, next: NextFunction): void => {
   try {
     const token = req.cookies.token;
 
@@ -24,10 +16,7 @@ const auth = (
       return;
     }
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET!
-    ) as JwtPayload;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
     req.user = {
       id: decoded.id,
