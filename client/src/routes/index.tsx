@@ -1,7 +1,8 @@
-import ForgotPassword from "@/pages/auth/ForgotPassword";
-import Login from "@/pages/auth/login";
-import Signup from "@/pages/auth/Singup";
-import VerifyOtp from "@/pages/auth/VerifyOtp";
+import ForgotPassword from "@/components/auth/ForgotPassword";
+import Login from "@/components/auth/login";
+import Signup from "@/components/auth/Singup";
+import VerifyOtp from "@/components/auth/VerifyOtp";
+import Home from "@/pages/Home";
 import { createBrowserRouter } from "react-router-dom";
 
 
@@ -9,7 +10,7 @@ import { createBrowserRouter } from "react-router-dom";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: <Home />,
   },
   {
     path: "/login",

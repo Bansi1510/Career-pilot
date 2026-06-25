@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+:root {
+  --sidebar: 255 255 255;
+  --sidebar-foreground: 15 23 42;
+  --sidebar-border: 226 232 240;
+}
