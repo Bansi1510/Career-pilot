@@ -1,17 +1,14 @@
+import { createBrowserRouter } from "react-router-dom";
 import ForgotPassword from "@/components/auth/ForgotPassword";
+import VerifyOtp from "@/components/auth/VerifyOtp";
+import TutorialPage from "@/components/dashboard/tutorial/TutorialPage";
 import Login from "@/components/auth/login";
 import Signup from "@/components/auth/Singup";
-import VerifyOtp from "@/components/auth/VerifyOtp";
-import Home from "@/pages/Home";
-import { createBrowserRouter } from "react-router-dom";
-
-
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import { Home } from "lucide-react";
 
 export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
+  // Auth Routes
   {
     path: "/login",
     element: <Login />,
@@ -21,11 +18,26 @@ export const router = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path: "/verify-otp",
-    element: <VerifyOtp />
+    path: "/forgot-password",
+    element: <ForgotPassword />,
   },
   {
-    path: "/forgot-password",
-    element: <ForgotPassword />
-  }
+    path: "/verify-otp",
+    element: <VerifyOtp />,
+  },
+
+  // Dashboard Routes
+  {
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "/tutorials/:skill",
+        element: <TutorialPage />,
+      },
+    ],
+  },
 ]);
