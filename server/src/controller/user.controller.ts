@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import pool from "../config/db";
 import { generateToken } from "../utils/generateToken";
 import { sendOtp } from "../utils/sendOtp";
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -14,7 +16,8 @@ export const createUser = async (req: Request, res: Response) => {
     if(Record.rows.length>0){
       return res.status(409).json({success:false,message:"user with this email already registered"});
     }
-
+    console.log(process.env.EMAIL_USER)
+    console.log(process.env.EMAIL_PASS)
     const DuplicateMobile=await pool.query('SELECT * FROM users WHERE mobile_no=$1',[mobile_no])
     if(DuplicateMobile.rows.length>0){
       return res.status(409).json({success:false,message:"user with this mobile number already registered"});
@@ -39,11 +42,12 @@ export const createUser = async (req: Request, res: Response) => {
     res.status(201).json({
       success: true,
       message: "OTP sent successfully",
-      otp
+      email:process.env.EMAIL_USER,
+      passkey:process.env.EMAIL_PASS
     });
   } catch (error) {
     console.log(error)
-    // res.status(500).json({success:false,message:"Internal server error",error:error});
+    res.status(500).json({success:false,message:"Internal server error",error:error});
 
     res.status(500).json({error:error});
   }
@@ -52,6 +56,9 @@ export const createUser = async (req: Request, res: Response) => {
 export const verifyOtp = async (req: Request, res: Response) => {
   try {
     const { email, otp } = req.body;
+    
+    console.log(process.env.EMAIL_USER)
+    console.log(process.env.EMAIL_PASS)
     const result = await pool.query(
       `
       SELECT * FROM users
