@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
+export const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false,
@@ -13,15 +13,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-
-(async () => {
-  try {
-    await transporter.verify();
-    console.log("✅ SMTP Ready");
-  } catch (err) {
-    console.error("❌ SMTP Error:", err);
-  }
-})();
 
 export const sendOtp = async (
   email: string,

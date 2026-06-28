@@ -3,11 +3,19 @@ import cors from "cors";
 import "./config/db";
 import cookieParser from "cookie-parser";
 import UserRouter from "./routes/user.route";
+import { transporter } from "./utils/sendOtp";
 
 const app = express();
 
 app.use(cookieParser());
-
+(async () => {
+  try {
+    await transporter.verify();
+    console.log("✅ SMTP Ready");
+  } catch (err) {
+    console.error("❌ SMTP Error:", err);
+  }
+})();
 app.use(express.json());
 app.use("/api/user", UserRouter);
 app.use(
