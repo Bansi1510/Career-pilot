@@ -13,6 +13,16 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+
+(async () => {
+  try {
+    await transporter.verify();
+    console.log("✅ SMTP Ready");
+  } catch (err) {
+    console.error("❌ SMTP Error:", err);
+  }
+})();
+
 export const sendOtp = async (
   email: string,
   firstName: string,
