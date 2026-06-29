@@ -6,6 +6,7 @@ import {
   updateUser,
   logout,
   resendOtp,
+  googleAuth,
 } from "../controller/user.controller";
 import auth from "../middleware/auth";
 
@@ -14,6 +15,7 @@ const UserRouter = express.Router();
 
 // Public Routes
 UserRouter.post("/signup", createUser);
+UserRouter.post("/auth/google", googleAuth);
 UserRouter.post("/verify-otp", verifyOtp);
 UserRouter.post("/re-otp", resendOtp);
 UserRouter.post("/login", login);

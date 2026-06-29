@@ -8,6 +8,8 @@ import { transporter } from "./utils/sendOtp";
 const app = express();
 
 app.use(cookieParser());
+
+console.log("🚀 Starting SMTP verification");
 (async () => {
   try {
     await transporter.verify();
@@ -16,6 +18,8 @@ app.use(cookieParser());
     console.error("❌ SMTP Error:", err);
   }
 })();
+console.log("🚀 SMTP verification finished");
+
 app.use(express.json());
 app.use("/api/user", UserRouter);
 app.use(
